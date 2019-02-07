@@ -1,0 +1,26 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}
+<video autoplay width="100%"></video>
+{% endblock %}
+
+{% block script %}
+try {
+  const video = document.querySelector('video');
+  if (!('mediaDevices' in navigator)) {
+    DemoUtils.reportDemoResult(false, {resultDetail: 'Device does not have a media capture interface'});
+  } else {
+    navigator.mediaDevices.getUserMedia({video: true})
+      .then(stream => {
+        video.srcObject = stream
+        DemoUtils.reportDemoResult(true);
+      })
+      .catch(err => DemoUtils.reportDemoResult(false, {resultDetail: 'Permission to access camera was denied'}))
+    ;
+  }
+} catch(e) {
+  DemoUtils.reportDemoResult(false, {resultDetail: 'Permission to access camera was denied'});
+}
+{% endblock %}

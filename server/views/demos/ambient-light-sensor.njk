@@ -1,0 +1,33 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}{% endblock %}
+
+{% block script %}
+let sns;
+let timeout = setTimeout(() => {
+  DemoUtils.reportDemoResult(false, {resultDetail: 'No readings detected, maybe device has no physical sensor'})
+}, 500);
+
+function onReading(e) {
+  document.body.innerHTML = `lux: ${sns.illuminance}`;
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Illumination was reported'});
+  clearTimeout(timeout);
+  sns.removeEventListener('reading', onReading);
+}
+
+try {
+  if (window.AmbientLightSensor) {
+    sns = new AmbientLightSensor({frequency: 10});
+    sns.addEventListener('reading', onReading);
+    sns.start();
+  } else {
+    DemoUtils.reportDemoResult(false, {resultDetail: 'Browser has no ambient light API'});
+    clearTimeout(timeout);
+  }
+} catch(e) {
+  DemoUtils.reportDemoResult(false, {resultDetail: 'Permission to access ambient light API was denied'});
+  clearTimeout(timeout);
+}
+{% endblock %}

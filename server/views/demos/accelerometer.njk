@@ -1,0 +1,39 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}Use a device with an accelerometer and move the device.{% endblock %}
+
+{% block script %}
+let sns, cleanup;
+let timeout = setTimeout(() => {
+  DemoUtils.reportDemoResult(false, {resultDetail: 'No readings detected, maybe device has no physical sensor'})
+}, 500);
+
+function onReading(e) {
+  const data = sns || e.acceleration;
+  const apiName = sns ? 'Accelerometer' : 'DeviceMotionEvent';
+  document.body.innerHTML = `x: ${data.x}, y: ${data.y}, z: ${data.z}`;
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Motion was reported using the '+apiName+' API'});
+  clearTimeout(timeout);
+  cleanup();
+}
+
+try {
+  if (window.Accelerometer) {
+    sns = new Accelerometer({frequency: 10});
+    sns.addEventListener('reading', onReading);
+    sns.start();
+    cleanup = () => sns.removeEventListener('reading', onReading);
+  } else if (window.DeviceMotionEvent) {
+    window.addEventListener("devicemotion", onReading);
+    cleanup = () => window.removeEventListener('devicemotion', onReading);
+  } else {
+    DemoUtils.reportDemoResult(false, {resultDetail: 'Browser has no accelerometer API'});
+    clearTimeout(timeout);
+  }
+} catch(e) {
+  DemoUtils.reportDemoResult(false, {resultDetail: 'Permission to access accelerometer was denied'});
+  clearTimeout(timeout);
+}
+{% endblock %}

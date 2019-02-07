@@ -1,0 +1,30 @@
+{% set css %}{% block css %}{% endblock %}{% endset %}
+{% set html %}{% block html %}{% endblock %}{% endset %}
+{% set script %}{% block script %}{% endblock %}{% endset %}
+
+{% if asJSON %}
+{
+	"css": {{ css | trim | dump | safe }},
+	"html": {{ html | trim | dump | safe }},
+  "script": {{ script | trim | dump | safe }}
+}
+{% else %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/demo-utils.js"></script>
+    <style>
+      {{ css | safe }}
+    </style>
+  </head>
+  <body>
+    {{ html | safe }}
+  </body>
+  <script>
+    {{ script | safe}}
+  </script>
+</html>
+{% endif %}

@@ -1,0 +1,20 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}
+html, body {
+  background: black; margin: 0;
+}
+{% endblock %}
+
+{% block html %}
+<video id='test-video' src="/test-assets/video.m4v" autoplay muted loop style='max-width:100%'></video>
+{% endblock %}
+
+{% block script %}
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const currentTime = document.getElementById('test-video').currentTime;
+    DemoUtils.reportDemoResult(currentTime > 0, {resultDetail: 'After 500ms, the playback time index is more than 0 (' + currentTime + ')'});
+  }, 500);
+});
+{% endblock %}

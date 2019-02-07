@@ -1,0 +1,27 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}{% endblock %}
+
+{% block script %}
+const keysystems = ['com.widevine.alpha', 'com.microsoft.playready', 'com.youtube.playready', 'webkit-org.w3.clearkey', 'org.w3.clearkey', 'com.adobe.primetime', 'com.adobe.access', 'com.apple.fairplay'];
+
+(async () => {
+  try {
+    if (!window.navigator.requestMediaKeySystemAccess) {
+      throw new Error('Browser does not support EME');
+    }
+    for (const ks of keysystems) {
+      console.log(ks);
+      try {
+        const mksAccess = await navigator.requestMediaKeySystemAccess(ks, [{contentType: 'video/webm; codecs="vp9"'}]);
+        DemoUtils.reportDemoResult(true, {resultDetail: 'Got MediaKeySystemAccess for ' + ks});
+        break;
+      } catch(e) { console.log(e.toString()); };
+    }
+  } catch(e) {
+    DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});
+  }
+})();
+{% endblock %}

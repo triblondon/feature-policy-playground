@@ -1,0 +1,90 @@
+.features-list.list-group a {
+	padding: 6px 10px;
+}
+
+main > section {
+	margin-top: 2em;
+}
+
+.policy-toggle {
+	display: flex;
+	align-items: center;
+}
+.policy-toggle h3 {
+	flex: 1 0 auto;
+}
+
+header {
+	padding: 15px 0;
+}
+
+h2 {
+	font-weight: lighter;
+	font-size: 50px;
+}
+h3 {
+	font-size: 1.75rem;
+	font-weight: 300;
+}
+.demo-container {
+	background: #444;
+	padding: 10px;
+	border-radius: 2px;
+	margin-bottom: 1em;
+}
+.demo-container h4 {
+	font-size: 1rem;
+	font-weight: bold;
+	margin: 0;
+	color: white;
+	background: black;
+	padding: 4px 4px;
+}
+.demo-code-blocks {
+	font-size: 0.8rem;
+}
+.demo-code-blocks:last-child {
+	margin-bottom: 0;
+}
+
+.demo-output {
+	display: flex;
+	flex-direction: column;
+}
+.demo-output iframe {
+	border: 0;
+	width: 100%;
+	height: 100%;
+	overflow: scroll;
+	background: white;
+}
+
+.result.alert {
+	display: flex;
+	align-content: center;
+	align-items: center;
+}
+.result.alert .spinner-grow {
+	margin-right: 10px;
+}
+.result.alert p {
+	margin: 0;
+}
+.result.alert p.detail {
+	margin-top: 0.3em;
+	font-size: 90%;
+	font-weight: bold;
+}
+
+.tags .badge {
+	margin-right: 10px
+}
+
+.feature-header {
+	padding-bottom: 10px;
+	margin-bottom: 1em;
+	border-bottom: 1px dotted #777;
+}
+.feature-header h2 {
+	margin: 0;
+}
