@@ -24,7 +24,13 @@
     {{ html | safe }}
   </body>
   <script>
-    {{ script | safe}}
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      {{ script | safe}}
+    } catch(err) {
+      reportFailure(err);
+    }
   </script>
 </html>
 {% endif %}

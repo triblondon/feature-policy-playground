@@ -8,19 +8,11 @@
 
 {% block script %}
 window.addEventListener('load', () => {
-  try {
-    document.write('<p>New content</p>');
-    if (document.body.innerText.includes('New content')) {
-      DemoUtils.reportDemoResult(true);
-    } else {
-      DemoUtils.reportDemoResult(false, {resultDetail: 'DOM does not contain the expected new content'});
-    }
-  } catch (e) {
-    if (e instanceof DOMException) {
-      DemoUtils.reportDemoResult(false, {failReason: 'permission-denied'});
-    } else {
-      DemoUtils.reportDemoResult(false, {resultDetail: 'Unexpected exception thrown: ' + e});
-    }
+  document.write('<p>New content</p>');
+  if (document.body.innerText.includes('New content')) {
+    DemoUtils.reportDemoResult(true);
+  } else {
+    throw new Error('DOM does not contain the expected new content');
   }
 });
 {% endblock %}

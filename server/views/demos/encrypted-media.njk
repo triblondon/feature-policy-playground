@@ -8,20 +8,17 @@
 const keysystems = ['com.widevine.alpha', 'com.microsoft.playready', 'com.youtube.playready', 'webkit-org.w3.clearkey', 'org.w3.clearkey', 'com.adobe.primetime', 'com.adobe.access', 'com.apple.fairplay'];
 
 (async () => {
-  try {
-    if (!window.navigator.requestMediaKeySystemAccess) {
-      throw new Error('Browser does not support EME');
-    }
-    for (const ks of keysystems) {
-      console.log(ks);
-      try {
-        const mksAccess = await navigator.requestMediaKeySystemAccess(ks, [{contentType: 'video/webm; codecs="vp9"'}]);
-        DemoUtils.reportDemoResult(true, {resultDetail: 'Got MediaKeySystemAccess for ' + ks});
-        break;
-      } catch(e) { console.log(e.toString()); };
-    }
-  } catch(e) {
-    DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});
+  if (!window.navigator.requestMediaKeySystemAccess) {
+    throw new Error('Browser does not support EME');
   }
+  for (const ks of keysystems) {
+    try {
+      const mksAccess = await navigator.requestMediaKeySystemAccess(ks, [{contentType: 'video/webm; codecs="vp9"'}]);
+      return DemoUtils.reportDemoResult(true, {resultDetail: 'Got MediaKeySystemAccess for ' + ks});
+    } catch(e) {
+      if (e.code === 18) throw e; // Rethrow it if it's a SecurityError
+    }
+  }
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Successfully called requestMediaKeySystemAccess but could not find a supported KeySystem'});
 })();
 {% endblock %}

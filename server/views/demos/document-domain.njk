@@ -5,10 +5,6 @@
 {% block html %}{% endblock %}
 
 {% block script %}
-try {
-  document.domain = document.domain;
-  DemoUtils.reportDemoResult(true);
-} catch(e) {
-  DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});
-}
+document.domain = document.domain;
+DemoUtils.reportDemoResult(true);
 {% endblock %}
