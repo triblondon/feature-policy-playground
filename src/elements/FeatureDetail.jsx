@@ -53,7 +53,14 @@ class FeatureDetail extends React.Component {
       "feature-spec": "Feature specification",
       "feature-mdn": "Documentation for the feature on MDN"
 		};
-		const exampleHeader = `Feature-Policy: ${feature.name} 'none'`;
+    const exampleHeader = `Feature-Policy: ${feature.name} 'none'`;
+
+    // Show default as not supported for browsers where there is no FP
+    const browsers = { firefox: "Mozilla Firefox", chrome: "Google Chrome", edge: "Microsoft Edge", safari: "Apple Safari" };
+    const browserSupport = Object.assign({
+      edge: false,
+      safari: false
+    }, feature.browserSupport);
 
     return (
       <main className='feature col-sm-9'>
@@ -93,8 +100,8 @@ class FeatureDetail extends React.Component {
 								<label className="custom-control-label" htmlFor="policyToggle">Allow policy</label>
 							</div>
             </div>
-						<div className="demo-container row">
-							<div className="demo-code-blocks col-lg-6">
+						<div className="demo-container row px-sm-2 mx-sm-0">
+							<div className="demo-code-blocks col-lg-6 px-sm-2">
                 {Boolean(this.state.demoCode.css) && (
                   <div>
 								    <h4>CSS</h4>
@@ -114,7 +121,7 @@ class FeatureDetail extends React.Component {
                   </div>
                 )}
 							</div>
-							<div className='demo-output col-lg-6'>
+							<div className='demo-output col-lg-6 px-sm-2'>
 								<h4>Output</h4>
 								<iframe
 									title='Demo output'
@@ -125,7 +132,29 @@ class FeatureDetail extends React.Component {
 						</div>
 						<TestResult id={this.state.demoID} expectToWork={this.state.policyAllowed} />
           </section>
-				)}
+        )}
+
+        <section className='does-it-work'>
+          <h3>Does it work?</h3>
+          <p>Currently Chromium based browsers, such as Google Chrome, Samsung Internet, and Opera, are the only user-agents to support Feature Policy.  The minimum version that correctly recognises the <code>{feature.name}</code> policy is:</p>
+          <div className='row'>
+            {Object.entries(browsers).map(([key, name]) => {
+              const status = ((key in browserSupport) ? (browserSupport[key] ? 'supported' : 'unsupported') : 'unknown');
+              return (
+                <div key={key} className='col-lg-3 col-sm-6'>
+                  <div className={'browser-support card ' + status}>
+                    <img src={'/browser-logos/'+key+'.svg'} className="card-img-top" alt={name}></img>
+                    <div className="card-body">
+                    {(status === 'supported') && (<p className='card-text'><i className="fas fa-check-circle"></i>{browserSupport[key].minVersion}+</p>)}
+                    {(status === 'unsupported') && (<p className='card-text'><i className="fas fa-times-circle"></i>Not supported</p>)}
+                    {(status === 'unknown') && (<p className='card-text'>Unknown</p>)}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         {Boolean(feature.links) && (
           <section className='links'>

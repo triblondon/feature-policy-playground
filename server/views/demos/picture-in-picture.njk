@@ -1,0 +1,42 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}
+html, body {
+  background: black; margin: 0; text-align: center;
+}
+{% endblock %}
+
+{% block html %}
+<video id='test-video' src="/test-assets/video.m4v" controls playsinline style='max-width:100%'></video>
+<button id='triggerPIPButton'>Toggle picture-in-picture</button>
+{% endblock %}
+
+{% block script %}
+const pipButton = document.getElementById('triggerPIPButton');
+const video = document.getElementById('test-video');
+
+pipButton.addEventListener('click', async event => {
+  pipButton.disabled = true;
+  try {
+    if (video !== document.pictureInPictureElement)
+      await video.requestPictureInPicture();
+    else
+      await document.exitPictureInPicture();
+  } catch(e) {
+    DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});
+  } finally {
+    pipButton.disabled = false;
+  }
+});
+
+if (!('pictureInPictureEnabled' in document)) throw new Error('Browser does not support Picture-in-picture');
+if (!document.pictureInPictureEnabled) throw new Error('PIP is not enabled in this document');
+setPipButton();
+video.addEventListener('loadedmetadata', setPipButton);
+video.addEventListener('emptied', setPipButton);
+video.addEventListener('enterpictureinpicture', () => DemoUtils.reportDemoResult(true));
+
+function setPipButton() {
+  pipButton.disabled = (video.readyState === 0) || video.disablePictureInPicture;
+}
+{% endblock %}

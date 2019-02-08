@@ -14,7 +14,11 @@ html, body {
 window.addEventListener('load', () => {
   setTimeout(() => {
     const currentTime = document.getElementById('test-video').currentTime;
-    DemoUtils.reportDemoResult(currentTime > 0, {resultDetail: 'After 500ms, the playback time index is more than 0 (' + currentTime + ')'});
+    if (currentTime > 0) {
+      DemoUtils.reportDemoResult(true, {resultDetail: 'The video started playing automatically'});
+    } else {
+      DemoUtils.reportDemoResult(false, {resultDetail: 'The video is paused'});
+    }
   }, 500);
 });
 {% endblock %}

@@ -27,20 +27,22 @@ class App extends Component {
 
   render() {
     return (
-      <div className='container'>
+      <div>
         <Header />
-				<div className='row'>
-					<FeatureSelector
-						features={features}
-						activeFeature={this.state.activeFeature}
-						onChange={newFeature => this.setFeature(newFeature)}
-					/>
-					{Boolean(this.state.activeFeature) ? (
-						<FeatureDetail feature={features.find(f => f.name === this.state.activeFeature)} />
-					) : (
-						<AboutContent />
-					)}
-				</div>
+        <div className='container'>
+          <div className='row'>
+            <FeatureSelector
+              features={features}
+              activeFeature={this.state.activeFeature}
+              onChange={newFeature => this.setFeature(newFeature)}
+            />
+            {Boolean(this.state.activeFeature) ? (
+              <FeatureDetail feature={features.find(f => f.name === this.state.activeFeature)} />
+            ) : (
+              <AboutContent />
+            )}
+          </div>
+        </div>
         <Footer />
       </div>
     );

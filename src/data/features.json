@@ -6,6 +6,10 @@
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/geolocation" },
       { "rel": "feature-spec", "href": "https://dev.w3.org/geo/api/spec-source.html", "note": "Geolocation API" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 },
+      "firefox": { "minVersion": 65 }
+    },
     "tags": ["consent-required"]
   },
   {
@@ -22,16 +26,27 @@
     "name": "midi",
     "desription": "The *midi* feature controls whether the current document is allowed to use the [Web MIDI API](https://webaudio.github.io/web-midi-api/).\n\nIf disabled in a document, the promise returned by [`requestMIDIAccess()`](https://webaudio.github.io/web-midi-api/#dom-navigator-requestmidiaccess) must reject with a `DOMException`",
     "links": [
-      { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/midi" }
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/midi" },
+      { "rel": "feature-spec", "href": "https://webaudio.github.io/web-midi-api/#dom-navigator-requestmidiaccess" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    },
     "tags": ["consent-required"]
   },
   {
     "name": "payment",
-    "description": "The *payment* feature controls whether the current document is allowed to use the [PaymentRequest interface](https://w3c.github.io/browser-payment-api/).\n\nIf disabled in a document, then calls to the [`PaymentRequest` constuctor](https://w3c.github.io/browser-payment-api/#constructor) MUST throw a `SecurityError`.",
+    "description": "The *payment* policy controls whether the current document is allowed to use the [PaymentRequest interface](https://w3c.github.io/browser-payment-api/).\n\nIf disallowed in a document, then calls to the [`PaymentRequest` constuctor](https://w3c.github.io/browser-payment-api/#constructor) MUST throw a `SecurityError`.",
     "links": [
-      { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/payment" }
-    ]
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/payment" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequest" }
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    }
   },
   {
     "name": "magnetometer",
@@ -41,6 +56,9 @@
   {
     "name": "layout-animations",
     "description": "This policy controls the ability of a document to perform animations that require updates to **layout**, rather than simply *repaints*, which are typically cheaper and allow for smoother animations.  So-called 'layout animations' can require significant CPU and often cannot be rendered smoothly.\n\nIf a document is disallowed from performing layout animations by this policy, only the inital and final states of the animation will be rendered.",
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    },
     "tags": ["anitpattern", "performance"]
   },
   {
@@ -54,6 +72,10 @@
       { "rel": "feature-spec", "href": "https://w3c.github.io/mediacapture-main/getusermedia.html#navigatorusermedia" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 59 },
+      "firefox": { "minVersion": 65 }
+    },
     "tags": ["consent-required"]
   },
   {
@@ -70,21 +92,47 @@
     "links": [
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/policies/optimized-images.md" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    },
     "tags": ["antipattern", "performance"]
   },
   {
     "name": "legacy-image-formats",
+    "description": "This policy controls the ability of the document to render images in legacy image formats.  These are defined as any format other than JPEG, PNG, GIF, WEBP, or SVG.  In documents in which this policy is disallowed, legacy-format images will be rendered with inverted colours.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/loonybear/feature-policy/blob/images/policies/optimized-images.md#legacy-image-formats-policy" }
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 68, "requiresFlag": true, "note": "Does not render the offending image at all" }
+    },
     "tags": ["antipattern", "performance"]
   },
   {
-    "name": "picture-in-picture"
+    "name": "picture-in-picture",
+    "description": "The *picture-in-picture* policy controls whether the current document is allowed to use [Picture In Picture](http://wicg.github.io/picture-in-picture).  If disallowed in a document, then calls to [`requestPictureInPicture()`](https://wicg.github.io/picture-in-picture/#dom-htmlvideoelement-requestpictureinpicture) MUST throw a `SecurityError` and [`pictureInPictureEnabled`](https://wicg.github.io/picture-in-picture/#dom-document-pictureinpictureenabled) MUST return `false`.",
+    "links": [
+      { "rel": "feature-spec", "href": "https://wicg.github.io/picture-in-picture/" }
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    }
   },
   {
     "name": "speaker",
     "tags": ["consent-required"]
   },
   {
-    "name": "fullscreen"
+    "name": "fullscreen",
+    "description": "The *fullscreen* policy controls whether the [`requestFullscreen()`](https://fullscreen.spec.whatwg.org/#dom-element-requestfullscreen) method is allowed to request fullscreen.\n\nIf disallowed in any document, the document will not be allowed to use fullscreen.  Triggering full-screen mode can be a jarring experience for users, and can be exploited by content that would otherwise be confined to a small frame.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "feature-spec", "href": "https://fullscreen.spec.whatwg.org/#dom-element-requestfullscreen" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen" }
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    }
   },
   {
     "name": "vr"
@@ -97,6 +145,10 @@
       { "rel": "policy-spec", "href": "https://html.spec.whatwg.org/multipage/infrastructure.html#document-domain-feature" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Document/domain" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 72 },
+      "firefox": { "minVersion": 65, "requiresFlag": true }
+    },
     "tags": ["antipattern"]
   },
   {
@@ -106,7 +158,10 @@
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/encrypted-media" },
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Navigator/requestMediaKeySystemAccess" }
-    ]
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    }
  },
   {
     "name": "autoplay",
@@ -117,6 +172,10 @@
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/autoplay" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autoplay" }
     ],
+    "browserSupport": {
+      "chrome": false,
+      "firefox": false
+    },
     "tags": ["antipattern"]
   },
   {
@@ -124,6 +183,15 @@
   },
   {
     "name": "font-display-late-swap",
+    "description": "This policy controls the ability of a document to use the `auto`, `block`, and `swap` values of the [font-display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) CSS property.  If the policy is disallowed for the current document, then any elements with a font-display that is not `fallback` or `optional` will be set to `optional`.\n\nIt's annoying for users when fonts take a long time to load, rendering a page unreadable even though the text is available ('blocking').  Not quite as bad, but still a jarring user experience, is when a fallback font is used and the element is rerendered in the webfont when it is available ('swapping').  Disabling the `font-display-late-swap` policy prevents both of these effects by giving the webfont a very small window of opportunity to load, and if it doesn't load in time, simply not using it at all and continuing to use the fallback instead.",
+    "links": [
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display" },
+      { "rel": "feature-spec", "href": "https://drafts.csswg.org/css-fonts-4/#font-display-desc" },
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/policies/font-display-late-swap.md" }
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    },
     "tags": ["antipattern"]
   },
   {
@@ -132,6 +200,9 @@
     "links": [
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/policies/unsized-media.md" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    },
     "tags": ["antipattern"]
   },
   {
@@ -153,6 +224,9 @@
 			{ "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Document/write" },
 			{ "rel": "feature-spec", "href": "https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-document-write" }
     ],
+    "browserSupport": {
+      "chrome": { "minVersion": 74 }
+    },
     "tags": ["antipattern", "performance"]
   },
   {
@@ -162,9 +236,9 @@
       { "rel": "policy-spec", "href": "https://github.com/whatwg/html/pull/3752", "note": "Pull request" },
       { "rel": "feature-spec", "href": "https://docs.google.com/document/d/1e8ZbVyUwgIkQMvJma3kKUDg8UUkLRRdANStqKuOIvHg/edit", "note": "Google doc" }
     ],
-    "notes": [
-      "This policy controls a behaviour that is not standardised"
-    ],
+    "browserSupport": {
+      "chrome": false
+    },
     "tags": ["performance"]
   },
   {
@@ -176,6 +250,18 @@
     "tags": ["antipattern", "performance"]
   },
   {
-    "name": "microphone"
+    "name": "microphone",
+    "description": "The *microphone* policy controls access to audio input devices requested through the [NavigatorUserMedia interface](https://w3c.github.io/mediacapture-main/getusermedia.html#navigatorusermedia).\n\nIf disallowed in a document, then calls to [`getUserMedia()`](https://w3c.github.io/mediacapture-main/getusermedia.html#dom-mediadevices-getusermedia()) MUST NOT grant access to audio input devices in that document.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "feature-spec", "href": "https://w3c.github.io/mediacapture-main/getusermedia.html#navigatorusermedia" },
+      { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/microphone" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" }
+    ],
+    "browserSupport": {
+      "chrome": { "minVersion": 72 },
+      "firefox": { "minVersion": 65 }
+    },
+    "tags": ["user-consent"]
   }
 ]

@@ -1,0 +1,26 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}
+#buyButton { display: none }
+{% endblock %}
+
+{% block html %}
+<p>Note: there is no risk of being charged any money by using this demo</p>
+<button id='buyButton'>Click to pay</button>
+{% endblock %}
+
+{% block script %}
+if (!('PaymentRequest' in window)) throw new Error('Browser does not have a Web Payments API');
+const payButton = document.getElementById('buyButton');
+let request = new PaymentRequest([{
+  supportedMethods: 'basic-card',
+  data: {supportedNetworks: ['mastercard', 'visa'], supportedTypes: ['debit', 'credit', 'prepaid']},
+}], {
+  total: {label: 'Donation', amount: {currency: 'USD', value: '55.00'}},
+});
+DemoUtils.reportDemoResult(true);
+payButton.style.display = 'block';
+payButton.addEventListener('click', () => {
+  request.show().then(instrumentResponse => alert('Just a test, payment data is not sent to server'));
+});
+{% endblock %}

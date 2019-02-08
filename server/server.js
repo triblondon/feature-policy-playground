@@ -12,6 +12,15 @@ expressNunjucks(app, { watch: true });
 app.use(express.static(path.join(__dirname, '../public')));
 app.disable('x-powered-by');
 
+app.get("/slow-load/:file", (req, res, next) => {
+  const delay = req.query.delayMS || 5000;
+  const base = path.resolve(path.join(__dirname, '../public/test-assets'));
+  const filepath = path.resolve(path.join(base, req.params.file));
+  if (!filepath.startsWith(base)) return next();
+  res.set('Cache-Control', 'no-store, private');
+  setTimeout(() => res.sendFile(filepath, delay), delay);
+});
+
 app.get('/demos/:policyName', (req, res, next) => {
 	try {
   	res.render('demos/'+req.params.policyName, {

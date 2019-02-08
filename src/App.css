@@ -43,9 +43,13 @@ h3 {
 .demo-code-blocks {
 	font-size: 0.8rem;
 }
-.demo-code-blocks:last-child {
-	margin-bottom: 0;
+.demo-code-blocks pre {
+  margin-bottom: 0;
 }
+.demo-code-blocks > *:not(:first-child) {
+  margin-top: 10px;
+}
+
 
 .demo-output {
 	display: flex;
@@ -87,4 +91,53 @@ h3 {
 }
 .feature-header h2 {
 	margin: 0;
+}
+
+.browser-support .card-text {
+  text-align: center;
+  line-height: 25px;
+}
+.browser-support .card-text i {
+  margin-right: 0.4em;
+}
+.browser-support.supported .card-text {
+  font-size: 22px;
+  color: #090;
+}
+.browser-support.unknown .card-text {
+  color: #444;
+  font-style: italic;
+}
+.browser-support.unsupported .card-text {
+  color: #a00;
+  font-size: 15px;
+}
+.browser-support .card-img-top {
+  height: 80px;
+  background: #eee;
+  padding: 10px;
+}
+
+footer {
+	font-size: 85%;
+  background-color: #f7f7f7;
+  margin-top: 20px;
+}
+footer .container {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+footer .footer-links {
+  padding-left: 0;
+  margin-bottom: 1rem;
+}
+footer .footer-links li {
+  display: inline-block;
+}
+footer .footer-links li + li {
+  margin-left: 15px
+}
+footer .footer-links a {
+  font-weight: 600;
+  color: #495057;
 }
