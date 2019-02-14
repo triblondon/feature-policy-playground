@@ -141,3 +141,7 @@ footer .footer-links a {
   font-weight: 600;
   color: #495057;
 }
+
+.features-list {
+  width: 100%;
+}

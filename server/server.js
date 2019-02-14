@@ -9,7 +9,7 @@ app.set('view engine', 'njk');
 app.set('views', './views');
 expressNunjucks(app, { watch: true });
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../build')));
 app.disable('x-powered-by');
 
 app.get("/slow-load/:file", (req, res, next) => {

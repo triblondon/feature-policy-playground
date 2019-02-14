@@ -1,0 +1,13 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}{% endblock %}
+
+{% block script %}
+const xhr = new XMLHttpRequest();
+xhr.open('GET', '/test-assets/simple-text.txt', false); // sync
+xhr.send();
+document.body.innerHTML = xhr.response;
+DemoUtils.reportDemoResult(true);
+{% endblock %}

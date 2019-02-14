@@ -63,7 +63,7 @@ class FeatureDetail extends React.Component {
     }, feature.browserSupport);
 
     return (
-      <main className='feature col-sm-9'>
+      <main className='feature col-12'>
         <div className='feature-header'>
 					{Boolean(feature.tags) && (
 						<div className='tags'>
@@ -136,7 +136,7 @@ class FeatureDetail extends React.Component {
 
         <section className='does-it-work'>
           <h3>Does it work?</h3>
-          <p>Currently Chromium based browsers, such as Google Chrome, Samsung Internet, and Opera, are the only user-agents to support Feature Policy.  The minimum version that correctly recognises the <code>{feature.name}</code> policy is:</p>
+          <p>Currently Firefox, and Chromium based browsers, such as Google Chrome, Samsung Internet, and Opera, are the only user-agents to support Feature Policy.  The minimum version that correctly recognises the <code>{feature.name}</code> policy is:</p>
           <div className='row'>
             {Object.entries(browsers).map(([key, name]) => {
               const status = ((key in browserSupport) ? (browserSupport[key] ? 'supported' : 'unsupported') : 'unknown');

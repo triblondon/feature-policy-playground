@@ -6,10 +6,6 @@
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/geolocation" },
       { "rel": "feature-spec", "href": "https://dev.w3.org/geo/api/spec-source.html", "note": "Geolocation API" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 },
-      "firefox": { "minVersion": 65 }
-    },
     "tags": ["consent-required"]
   },
   {
@@ -31,9 +27,6 @@
       { "rel": "feature-spec", "href": "https://webaudio.github.io/web-midi-api/#dom-navigator-requestmidiaccess" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 }
-    },
     "tags": ["consent-required"]
   },
   {
@@ -43,10 +36,7 @@
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/payment" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequest" }
-    ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 }
-    }
+    ]
   },
   {
     "name": "magnetometer",
@@ -62,7 +52,11 @@
     "tags": ["anitpattern", "performance"]
   },
   {
-    "name": "vertical-scroll"
+    "name": "vertical-scroll",
+    "description": "The `vertical-scroll` policy controls whether a document has the right to override normal scrolling behaviour. When disallowed in a document, calls to `event.preventDefault()` on scroll-related events will be ineffective, the CSS property `touch-action: none` will behave as if it is `touch-action: pan-y`, and `element.scrollIntoView()` will not propagate outside the document (ie. any parent frame that needs to be scrolled in order for the element to be in view, will not be).",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/ehsan-karamad/feature-policy/blob/master/policies/vertical_scroll.md" }
+    ]
   },
   {
     "name": "camera",
@@ -72,18 +66,21 @@
       { "rel": "feature-spec", "href": "https://w3c.github.io/mediacapture-main/getusermedia.html#navigatorusermedia" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 59 },
-      "firefox": { "minVersion": 65 }
-    },
     "tags": ["consent-required"]
   },
   {
     "name": "usb",
+    "description": "The *usb* feature controls whether the current document is allowed to use the [WebUSB API](https://wicg.github.io/webusb/).\n\nIf disabled in a document, then calls to the [`getDevices()`](https://wicg.github.io/webusb/#dom-usb-getdevices) should return a promise which rejects with a SecurityError DOMException.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "feature-spec", "href": "https://wicg.github.io/webusb/" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/USB/getDevices" }
+    ],
     "tags": ["consent-required"]
   },
   {
     "name": "unoptimized-images",
+    "description": "When optimizing images, the file size should be kept as small as possible. The larger the download size is, the longer it takes a page to load. Stripping metadata, picking a good image format, and using image compression, are all common ways to optimize an image's file size. `unoptimized-images` is a policy that restricts images to have a file size (in terms of number of bytes) no more than a specified ratio of the image size (width * height) on the web page.\n\nWhen a document is disallowed to use `unoptimized-images` policy, its `<img>` elements whose file sizes are too big will be rendered as placeholder images.\n\n### Specification\n\nThe default maximum file size of an optimized image is calculated as following:\n\n```metadata size limit + byte-per-pixel ratio * image resolution```\n\n* For images of one of the modern formats (JPEG, PNG, GIF, WEBP, and SVG)\n    * The default metadata size limit is tentatively 1KB (1024 bytes).\n    * The default byte-per-pixel ratio is tentatively 0.5.\n* For images of other legacy formats\n    * The metadata size limit is set to 0KB.\n    * The byte-per-pixel ratio is set to 0.",
     "tags": ["antipattern", "performance"]
   },
   {
@@ -92,9 +89,6 @@
     "links": [
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/policies/optimized-images.md" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 }
-    },
     "tags": ["antipattern", "performance"]
   },
   {
@@ -103,9 +97,6 @@
     "links": [
       { "rel": "policy-spec", "href": "https://github.com/loonybear/feature-policy/blob/images/policies/optimized-images.md#legacy-image-formats-policy" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 68, "requiresFlag": true, "note": "Does not render the offending image at all" }
-    },
     "tags": ["antipattern", "performance"]
   },
   {
@@ -120,6 +111,10 @@
   },
   {
     "name": "speaker",
+    "description": "The *speaker* policy controls access to audio output devices requested through the [NavigatorUserMedia interface](https://w3c.github.io/mediacapture-main/getusermedia.html#navigatorusermedia).\n\nIf disallowed in a document, then calls to [`getUserMedia()`](https://w3c.github.io/mediacapture-main/getusermedia.html#dom-mediadevices-getusermedia()) MUST NOT grant access to audio output devices in that document.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" }
+    ],
     "tags": ["consent-required"]
   },
   {
@@ -129,13 +124,16 @@
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
       { "rel": "feature-spec", "href": "https://fullscreen.spec.whatwg.org/#dom-element-requestfullscreen" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen" }
-    ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 }
-    }
+    ]
   },
   {
-    "name": "vr"
+    "name": "vr",
+    "description": "The *vr* policy controls whether the current document is allowed to use the [WebVR API](https://immersive-web.github.io/webvr/spec/1.1/).\n\nIf disallowed in a document, then calls to the [`getVRDisplays()`](https://immersive-web.github.io/webvr/spec/1.1/#navigator-getvrdisplays-attribute) should return a promise which rejects with a SecurityError DOMException.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "feature-spec", "href": "https://immersive-web.github.io/webvr/spec/1.1/" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getVRDisplays" }
+    ]
   },
   {
     "name": "document-domain",
@@ -146,8 +144,7 @@
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Document/domain" }
     ],
     "browserSupport": {
-      "chrome": { "minVersion": 72 },
-      "firefox": { "minVersion": 65, "requiresFlag": true }
+      "chrome": { "minVersion": 72 }
     },
     "tags": ["antipattern"]
   },
@@ -158,10 +155,7 @@
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/encrypted-media" },
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Navigator/requestMediaKeySystemAccess" }
-    ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 }
-    }
+    ]
  },
   {
     "name": "autoplay",
@@ -179,7 +173,13 @@
     "tags": ["antipattern"]
   },
   {
-    "name": "wake-lock"
+    "name": "wake-lock",
+    "description": "This policy controls the ability of a document to invoke the [Wake Lock API](https://w3c.github.io/wake-lock/), which allows a webpage to prevent a device from going to sleep if the user becomes idle. If disallowed in the document, a call to `Navigator.requestWakeLock()` will return a promise that rejects.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://w3c.github.io/wake-lock/#dfn-wake-lock-feature" },
+      { "rel": "feature-spec", "href": "https://w3c.github.io/wake-lock/" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/Navigator/requestWakeLock" }
+    ]
   },
   {
     "name": "font-display-late-swap",
@@ -200,9 +200,6 @@
     "links": [
       { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/policies/unsized-media.md" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 74 }
-    },
     "tags": ["antipattern"]
   },
   {
@@ -243,10 +240,20 @@
   },
   {
     "name": "sync-script",
+    "description": "The *sync-script* policy controls whether a document will execute parser-blocking JavaScript.  This includes both external `<script src=''>` resources that do not have the `async` or `defer` attributes, but also any inline script that is not an ES module, and which does not have a `defer` attribute.  Blocked scripts will be skipped by the parser completely, ie. they are not simply forced to execute asynchronously, since that may result in unexpected behaviour.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/issues/135", "note": "Tracking issue"}
+    ],
     "tags": ["antipattern", "performance"]
   },
   {
     "name": "sync-xhr",
+    "description": "The *sync-xhr* policy controls whether synchronous requests can be made through the [XMLHttpRequest API](https://xhr.spec.whatwg.org/).\n\nIf disallowed in a document, then calls to [`send()`](https://xhr.spec.whatwg.org/#the-send()-method) on `XMLHttpRequest` objects with the synchronous flag set will fail, causing a NetworkError DOMException to be thrown.",
+    "links": [
+      { "rel": "policy-spec", "href": "https://github.com/w3c/webappsec-feature-policy/blob/master/features.md" },
+      { "rel": "feature-spec", "href": "https://xhr.spec.whatwg.org/#the-send()-method" },
+      { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open" }
+    ],
     "tags": ["antipattern", "performance"]
   },
   {
@@ -258,10 +265,6 @@
       { "rel": "policy-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/microphone" },
       { "rel": "feature-mdn", "href": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" }
     ],
-    "browserSupport": {
-      "chrome": { "minVersion": 72 },
-      "firefox": { "minVersion": 65 }
-    },
     "tags": ["user-consent"]
   }
 ]

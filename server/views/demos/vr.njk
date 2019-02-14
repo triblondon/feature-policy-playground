@@ -1,0 +1,16 @@
+{% extends "../layouts/demo.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}{% endblock %}
+
+{% block script %}
+if (!('getVRDisplays' in navigator)) throw new Error("Browser does not support WebVR");
+navigator.getVRDisplays()
+  .then(function(displays) {
+    document.body.innerHTML = "Number of VR displays available: " + displays.length;
+      DemoUtils.reportDemoResult(true);
+  })
+  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))
+;
+{% endblock %}
