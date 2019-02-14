@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "body, html { margin: 0; width: 100%; height: 100%; overflow: hidden }",
+	"html": "<script src='/test-assets/volume-meter.js'></script>\n<canvas id=\"meter\"></canvas>",
+  "script": "if (!('AudioContext' in window && 'mediaDevices' in navigator)) throw new Error('Browser does not suppport WebAudio API');\nwindow.onload = function() {\n  const canvasEl = document.getElementById(\"meter\");\n  canvasEl.width = document.body.offsetWidth;\n  canvasEl.height = document.body.offsetHeight;\n  const canvasContext = canvasEl.getContext(\"2d\");\n  const audioContext = new AudioContext();\n  let meter;\n  navigator.mediaDevices.getUserMedia({ audio: true })\n    .then(stream => {\n      DemoUtils.reportDemoResult(true);\n      meter = createAudioMeter(audioContext);\n      audioContext.createMediaStreamSource(stream).connect(meter);\n      drawLoop();\n    })\n    .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))\n  ;\n  function drawLoop() {\n    const volh = Math.min((meter.volume * 5 * canvasEl.height) + 10, canvasEl.height);\n    canvasContext.clearRect(0, 0, canvasEl.width, canvasEl.height);\n    canvasContext.fillStyle = \"red\";\n    canvasContext.fillRect(0, Math.round(canvasEl.height-volh), canvasEl.width, Math.round(volh));\n    window.requestAnimationFrame(drawLoop);\n  }\n};"
+}
+

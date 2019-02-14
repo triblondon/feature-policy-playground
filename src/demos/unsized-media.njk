@@ -1,0 +1,14 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}
+<img id='test-img' src="https://picsum.photos/150/300/" />
+{% endblock %}
+
+{% block script %}
+window.addEventListener('load', () => {
+  const w = document.getElementById('test-img').offsetWidth;
+  DemoUtils.reportDemoResult(w === 150);
+});
+{% endblock %}

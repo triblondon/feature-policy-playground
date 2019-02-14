@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "@font-face {\n  font-family: \"aquilinetworegular\";\n\n  /* License: https://www.fontsquirrel.com/license/Aquiline-two */\n  src: url(/test-assets/AquilineTwo-webfont.woff?delay=1000) format('woff');\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\nbody {\n  font-family: aquilinetworegular; /* This font has a huge line-height */\n  font-size: 8vw;\n}",
+	"html": "<p id='test-para'>This text is supposed to be shown in an interesting font, which takes ages to load.</p>",
+  "script": "const paraEl = document.getElementById('test-para');\nconst benchmarkHeight = paraEl.offsetHeight;\nsetTimeout(() => {\n  const newHeight = paraEl.offsetHeight;\n  if (newHeight !== benchmarkHeight) {\n    return DemoUtils.reportDemoResult(true, {resultDetail: \"The font changed after the content was loaded\"});\n  } else {\n    return DemoUtils.reportDemoResult(false, {resultDetail: \"The font may have loaded but the browser didn't render it\"});\n  }\n}, 1200);"
+}
+

@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "let sns;\nDemoUtils.setupTimeout('No readings detected, maybe device has no physical sensor');\n\nfunction onReading(e) {\n  document.body.innerHTML = `x: ${sns.x}, y: ${sns.y}, z: ${sns.z}`;\n  DemoUtils.reportDemoResult(true, {resultDetail: 'Magnetic field was reported'});\n  sns.removeEventListener('reading', onReading);\n}\n\nif (window.Magnetometer) {\n  sns = new Magnetometer({frequency: 10});\n  sns.addEventListener('reading', onReading);\n  sns.start();\n} else {\n  throw new Error('Browser has no magnetometer API');\n}"
+}
+

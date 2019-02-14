@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "This page makes an annoying noise for 1 second.",
+  "script": "if (!('AudioContext' in window)) throw new Error('Browser does not have an AudioContext API');\nconst audioCtx = new AudioContext;\nconst o = audioCtx.createOscillator();\no.type = 'square';\no.frequency.setValueAtTime(440, audioCtx.currentTime);\no.connect(audioCtx.destination);\no.start();\nDemoUtils.reportDemoResult(true)\nsetTimeout(() => o.stop(), 1000);"
+}
+

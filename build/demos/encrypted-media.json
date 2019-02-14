@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "if (!window.navigator.requestMediaKeySystemAccess) {\n  throw new Error('Browser does not support EME');\n}\n\n(async () => {\n  const keysystems = ['com.widevine.alpha', 'com.microsoft.playready', 'com.youtube.playready', 'webkit-org.w3.clearkey', 'org.w3.clearkey', 'com.adobe.primetime', 'com.adobe.access', 'com.apple.fairplay'];\n  for (const ks of keysystems) {\n    try {\n      const mksAccess = await navigator.requestMediaKeySystemAccess(ks, [{contentType: 'video/webm; codecs=\"vp9\"'}]);\n      return DemoUtils.reportDemoResult(true, {resultDetail: 'Got MediaKeySystemAccess for ' + ks});\n    } catch(e) {\n      if (e.code === 18) {\n        return DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});\n      }\n    }\n  }\n  DemoUtils.reportDemoResult(true, {resultDetail: 'Successfully called requestMediaKeySystemAccess but could not find a supported KeySystem'});\n})();"
+}
+

@@ -48,7 +48,9 @@ const triggerRouteAction = () => {
 
 const setState = (newRoutePath: string, mode: string) => {
   const methodName = mode === ROUTER_MODE_REPLACE ? 'replaceState' : 'pushState'
-  if (newRoutePath !== window.location.pathname) window.history[methodName]({}, '', newRoutePath)
+  if (newRoutePath !== window.location.pathname) {
+    window.history[methodName]({}, '', newRoutePath)
+  }
 }
 
 // ---------------------------------------------------------------------------

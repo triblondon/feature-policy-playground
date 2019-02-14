@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "#only-when-fullscreen {\n  font-size: 8vw;\n  text-align: center;\n  background: white;\n  display: none;\n  padding: 10vw;\n}\n.fullscreen #only-when-fullscreen {\n  display: block;\n}",
+	"html": "<button id='trigger'>Go fullscreen!</button>\n<div id='only-when-fullscreen'>Reverting to normal mode in a few seconds... (or press ESC)</div>",
+  "script": "const targetEl = document.getElementById('only-when-fullscreen');\nconst triggerEl = document.getElementById('trigger');\ntriggerEl.addEventListener('click', () => {\n  targetEl.requestFullscreen()\n    .then(() => {\n      DemoUtils.reportDemoResult(true);\n      setTimeout(() => document.exitFullscreen(), 1000);\n    })\n    .catch(e => DemoUtils.reportDemoResult(false, {failReason: e.toString()}))\n  ;\n});\ntargetEl.addEventListener('fullscreenchange', () => {\n  document.body.classList.toggle('fullscreen', !!document.fullscreenElement);\n});"
+}
+

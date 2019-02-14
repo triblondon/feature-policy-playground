@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<video autoplay width=\"100%\"></video>",
+  "script": "const video = document.querySelector('video');\nif (!('mediaDevices' in navigator)) {\n  throw new Error('Device does not have a media capture interface');\n}\nnavigator.mediaDevices.getUserMedia({video: true})\n  .then(stream => {\n    video.srcObject = stream\n    DemoUtils.reportDemoResult(true);\n  })\n  .catch(err => DemoUtils.reportDemoResult(false, {resultDetail: err.toString()}))\n;"
+}
+

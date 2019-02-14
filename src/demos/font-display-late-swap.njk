@@ -1,0 +1,34 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}
+@font-face {
+  font-family: "aquilinetworegular";
+
+  /* License: https://www.fontsquirrel.com/license/Aquiline-two */
+  src: url(/test-assets/AquilineTwo-webfont.woff?delay=1000) format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+body {
+  font-family: aquilinetworegular; /* This font has a huge line-height */
+  font-size: 8vw;
+}
+{% endblock %}
+
+{% block html %}
+<p id='test-para'>This text is supposed to be shown in an interesting font, which takes ages to load.</p>
+{% endblock %}
+
+{% block script %}
+const paraEl = document.getElementById('test-para');
+const benchmarkHeight = paraEl.offsetHeight;
+setTimeout(() => {
+  const newHeight = paraEl.offsetHeight;
+  if (newHeight !== benchmarkHeight) {
+    return DemoUtils.reportDemoResult(true, {resultDetail: "The font changed after the content was loaded"});
+  } else {
+    return DemoUtils.reportDemoResult(false, {resultDetail: "The font may have loaded but the browser didn't render it"});
+  }
+}, 1200);
+{% endblock %}

@@ -1,0 +1,75 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+if (!window.navigator.requestMediaKeySystemAccess) {
+  throw new Error('Browser does not support EME');
+}
+
+(async () => {
+  const keysystems = ['com.widevine.alpha', 'com.microsoft.playready', 'com.youtube.playready', 'webkit-org.w3.clearkey', 'org.w3.clearkey', 'com.adobe.primetime', 'com.adobe.access', 'com.apple.fairplay'];
+  for (const ks of keysystems) {
+    try {
+      const mksAccess = await navigator.requestMediaKeySystemAccess(ks, [{contentType: 'video/webm; codecs="vp9"'}]);
+      return DemoUtils.reportDemoResult(true, {resultDetail: 'Got MediaKeySystemAccess for ' + ks});
+    } catch(e) {
+      if (e.code === 18) {
+        return DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});
+      }
+    }
+  }
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Successfully called requestMediaKeySystemAccess but could not find a supported KeySystem'});
+})();
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

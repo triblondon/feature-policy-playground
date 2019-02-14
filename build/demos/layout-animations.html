@@ -1,0 +1,84 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+.box {
+  position: absolute;
+  background-color: red;
+  width: 100px;
+  height: 100px;
+}
+.animate-css {
+  animation-duration: 1s;
+  animation-name: slider;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+@keyframes slider {
+  from { left: 0; }
+  to { left: calc(100% - 100px); }
+}
+
+    </style>
+  </head>
+  <body>
+    
+<div id='box' class='box animate-css'></div>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+window.addEventListener('load', () => {
+  const max = window.innerWidth - 100;
+  setTimeout(() => {
+    const pos = document.getElementById('box').offsetLeft;
+    const didInterpolatedRender = (pos > 0 && pos < max);
+    DemoUtils.reportDemoResult(didInterpolatedRender);
+  }, 200);
+});
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

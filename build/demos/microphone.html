@@ -1,0 +1,87 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+body, html { margin: 0; width: 100%; height: 100%; overflow: hidden }
+
+    </style>
+  </head>
+  <body>
+    
+<script src='/test-assets/volume-meter.js'></script>
+<canvas id="meter"></canvas>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+if (!('AudioContext' in window && 'mediaDevices' in navigator)) throw new Error('Browser does not suppport WebAudio API');
+window.onload = function() {
+  const canvasEl = document.getElementById("meter");
+  canvasEl.width = document.body.offsetWidth;
+  canvasEl.height = document.body.offsetHeight;
+  const canvasContext = canvasEl.getContext("2d");
+  const audioContext = new AudioContext();
+  let meter;
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      DemoUtils.reportDemoResult(true);
+      meter = createAudioMeter(audioContext);
+      audioContext.createMediaStreamSource(stream).connect(meter);
+      drawLoop();
+    })
+    .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))
+  ;
+  function drawLoop() {
+    const volh = Math.min((meter.volume * 5 * canvasEl.height) + 10, canvasEl.height);
+    canvasContext.clearRect(0, 0, canvasEl.width, canvasEl.height);
+    canvasContext.fillStyle = "red";
+    canvasContext.fillRect(0, Math.round(canvasEl.height-volh), canvasEl.width, Math.round(volh));
+    window.requestAnimationFrame(drawLoop);
+  }
+};
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

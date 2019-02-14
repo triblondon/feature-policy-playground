@@ -1,0 +1,91 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+html, body {
+  background: black; margin: 0; text-align: center;
+}
+
+    </style>
+  </head>
+  <body>
+    
+<video id='test-video' src="/test-assets/video.m4v" controls playsinline style='max-width:100%'></video>
+<button id='triggerPIPButton'>Toggle picture-in-picture</button>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+const pipButton = document.getElementById('triggerPIPButton');
+const video = document.getElementById('test-video');
+
+pipButton.addEventListener('click', async event => {
+  pipButton.disabled = true;
+  try {
+    if (video !== document.pictureInPictureElement)
+      await video.requestPictureInPicture();
+    else
+      await document.exitPictureInPicture();
+  } catch(e) {
+    DemoUtils.reportDemoResult(false, {resultDetail: e.toString()});
+  } finally {
+    pipButton.disabled = false;
+  }
+});
+
+if (!('pictureInPictureEnabled' in document)) throw new Error('Browser does not support Picture-in-picture');
+if (!document.pictureInPictureEnabled) throw new Error('PIP is not enabled in this document');
+setPipButton();
+video.addEventListener('loadedmetadata', setPipButton);
+video.addEventListener('emptied', setPipButton);
+video.addEventListener('enterpictureinpicture', () => DemoUtils.reportDemoResult(true));
+
+function setPipButton() {
+  pipButton.disabled = (video.readyState === 0) || video.disablePictureInPicture;
+}
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

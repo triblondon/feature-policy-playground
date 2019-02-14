@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": ".box {\n  position: absolute;\n  background-color: red;\n  width: 100px;\n  height: 100px;\n}\n.animate-css {\n  animation-duration: 1s;\n  animation-name: slider;\n  animation-direction: alternate;\n  animation-iteration-count: infinite;\n}\n@keyframes slider {\n  from { left: 0; }\n  to { left: calc(100% - 100px); }\n}",
+	"html": "<div id='box' class='box animate-css'></div>",
+  "script": "window.addEventListener('load', () => {\n  const max = window.innerWidth - 100;\n  setTimeout(() => {\n    const pos = document.getElementById('box').offsetLeft;\n    const didInterpolatedRender = (pos > 0 && pos < max);\n    DemoUtils.reportDemoResult(didInterpolatedRender);\n  }, 200);\n});"
+}
+

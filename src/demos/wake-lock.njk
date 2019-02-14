@@ -1,0 +1,18 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}{% endblock %}
+
+{% block script %}
+if (!('getWakeLock' in navigator)) throw new Error("Browser does not support Wake locks");
+navigator.getWakeLock('screen')
+  .then(function(wakeLock) {
+    var request = wakeLock.createRequest();
+    setTimeout(() => request.cancel(), 1000);
+    document.body.innerHTML = "Got wake lock";
+    DemoUtils.reportDemoResult(true);
+  })
+  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))
+;
+{% endblock %}

@@ -1,0 +1,75 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+#buyButton { display: none }
+
+    </style>
+  </head>
+  <body>
+    
+<p>Note: there is no risk of being charged any money by using this demo</p>
+<button id='buyButton'>Click to pay</button>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+if (!('PaymentRequest' in window)) throw new Error('Browser does not have a Web Payments API');
+const payButton = document.getElementById('buyButton');
+let request = new PaymentRequest([{
+  supportedMethods: 'basic-card',
+  data: {supportedNetworks: ['mastercard', 'visa'], supportedTypes: ['debit', 'credit', 'prepaid']},
+}], {
+  total: {label: 'Donation', amount: {currency: 'USD', value: '55.00'}},
+});
+DemoUtils.reportDemoResult(true);
+payButton.style.display = 'block';
+payButton.addEventListener('click', () => {
+  request.show().then(instrumentResponse => alert('Just a test, payment data is not sent to server'));
+});
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

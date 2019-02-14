@@ -1,0 +1,69 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+
+    </style>
+  </head>
+  <body>
+    
+This page makes an annoying noise for 1 second.
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+if (!('AudioContext' in window)) throw new Error('Browser does not have an AudioContext API');
+const audioCtx = new AudioContext;
+const o = audioCtx.createOscillator();
+o.type = 'square';
+o.frequency.setValueAtTime(440, audioCtx.currentTime);
+o.connect(audioCtx.destination);
+o.start();
+DemoUtils.reportDemoResult(true)
+setTimeout(() => o.stop(), 1000);
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

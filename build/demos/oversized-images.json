@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<img\n  id='test-img'\n  src=\"https://picsum.photos/1000/1000/\"\n  width=\"200\" height=\"200\"\n/>",
+  "script": ""
+}
+

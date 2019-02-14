@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "html, body {\n  background: black; margin: 0;\n}",
+	"html": "<video id='test-video' src=\"/test-assets/video.m4v\" autoplay muted loop style='max-width:100%'></video>",
+  "script": "window.addEventListener('load', () => {\n  setTimeout(() => {\n    const currentTime = document.getElementById('test-video').currentTime;\n    if (currentTime > 0) {\n      DemoUtils.reportDemoResult(true, {resultDetail: 'The video started playing automatically'});\n    } else {\n      DemoUtils.reportDemoResult(false, {resultDetail: 'The video is paused'});\n    }\n  }, 500);\n});"
+}
+

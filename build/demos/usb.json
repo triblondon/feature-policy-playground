@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "if (!('usb' in navigator)) throw new Error(\"Browser does not support WebUSB\");\nnavigator.usb.getDevices()\n  .then(devices => {\n    const report = \"<p>Total devices: \" + devices.length + \"</p><ul>\" + devices.map(d => {\n      return \"<li>Product name: \" + device.productName + \", serial number \" + device.serialNumber + \"</li>\";\n    }).join('\\n') + \"</ul>\";\n    document.body.innerHTML = report;\n    DemoUtils.reportDemoResult(true);\n  })\n  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))\n;"
+}
+

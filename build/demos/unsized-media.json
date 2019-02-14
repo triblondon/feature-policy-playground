@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<img id='test-img' src=\"https://picsum.photos/150/300/\" />",
+  "script": "window.addEventListener('load', () => {\n  const w = document.getElementById('test-img').offsetWidth;\n  DemoUtils.reportDemoResult(w === 150);\n});"
+}
+

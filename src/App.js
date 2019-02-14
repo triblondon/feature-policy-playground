@@ -9,7 +9,7 @@ import FeatureDetail from './elements/FeatureDetail';
 import FeatureSelector from './elements/FeatureSelector';
 import Footer from './elements/Footer';
 
-import features from './data/policies-dist.json';
+import policies from './_build/policies.json';
 
 class App extends Component {
   constructor (props) {
@@ -23,7 +23,7 @@ class App extends Component {
     router.configure({
       routes: [
         { name: 'empty', pattern: /^\/$/, action: () => this.setPolicy(null) },
-        { name: 'policy', pattern: /^\/policies\/([0-9a-zA-Z%]+)\/?$/, action: params => this.setPolicy(params[1]) }
+        { name: 'policy', pattern: /^\/policies\/([^/]+)\/?$/, action: params => this.setPolicy(params[1]) }
       ],
       triggerForInitialState: true
     })
@@ -45,16 +45,17 @@ class App extends Component {
         <div className='container'>
           {Boolean(this.state.activeFeature) ? (
             <div className='row'>
-              <FeatureDetail feature={features.find(f => f.name === this.state.activeFeature)} />
+              <FeatureDetail feature={policies.find(f => f.name === this.state.activeFeature)} />
             </div>
           ) : (
             <div>
               <AboutContent />
               <FeatureSelector
-                features={features}
+                policies={policies}
                 activeFeature={this.state.activeFeature}
                 onChange={newFeature => this.setPolicy(newFeature)}
               />
+              <p>Browser support data courtesy of MDN's <a href='https://github.com/mdn/browser-compat-data'>public browser-compat-data</a> project.</p>
             </div>
           )}
         </div>

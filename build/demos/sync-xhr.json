@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "const xhr = new XMLHttpRequest();\nxhr.open('GET', '/test-assets/simple-text.txt', false); // sync\nxhr.send();\ndocument.body.innerHTML = xhr.response;\nDemoUtils.reportDemoResult(true);"
+}
+

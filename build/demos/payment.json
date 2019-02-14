@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "#buyButton { display: none }",
+	"html": "<p>Note: there is no risk of being charged any money by using this demo</p>\n<button id='buyButton'>Click to pay</button>",
+  "script": "if (!('PaymentRequest' in window)) throw new Error('Browser does not have a Web Payments API');\nconst payButton = document.getElementById('buyButton');\nlet request = new PaymentRequest([{\n  supportedMethods: 'basic-card',\n  data: {supportedNetworks: ['mastercard', 'visa'], supportedTypes: ['debit', 'credit', 'prepaid']},\n}], {\n  total: {label: 'Donation', amount: {currency: 'USD', value: '55.00'}},\n});\nDemoUtils.reportDemoResult(true);\npayButton.style.display = 'block';\npayButton.addEventListener('click', () => {\n  request.show().then(instrumentResponse => alert('Just a test, payment data is not sent to server'));\n});"
+}
+

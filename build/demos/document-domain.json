@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "document.domain = document.domain;\nDemoUtils.reportDemoResult(true);"
+}
+

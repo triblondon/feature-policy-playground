@@ -1,0 +1,35 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}
+.box {
+  position: absolute;
+  background-color: red;
+  width: 100px;
+  height: 100px;
+}
+.animate-css {
+  animation-duration: 1s;
+  animation-name: slider;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+@keyframes slider {
+  from { left: 0; }
+  to { left: calc(100% - 100px); }
+}
+{% endblock %}
+
+{% block html %}
+<div id='box' class='box animate-css'></div>
+{% endblock %}
+
+{% block script %}
+window.addEventListener('load', () => {
+  const max = window.innerWidth - 100;
+  setTimeout(() => {
+    const pos = document.getElementById('box').offsetLeft;
+    const didInterpolatedRender = (pos > 0 && pos < max);
+    DemoUtils.reportDemoResult(didInterpolatedRender);
+  }, 200);
+});
+{% endblock %}

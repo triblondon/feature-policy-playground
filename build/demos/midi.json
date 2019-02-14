@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "navigator.requestMIDIAccess()\n  .then(access => {\n    const inputs = Array.from(access.inputs.values());\n    const outputs = Array.from(access.outputs.values());\n    document.body.innerHTML = '<p>MIDI devices connected:</p><p>Input devices: '+ inputs.length + '</p><p>Output devices: '+ outputs.length + '</p>';\n    DemoUtils.reportDemoResult(true);\n  })\n  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))\n;"
+}
+

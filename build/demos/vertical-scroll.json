@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<p style='height:100px'>Scroll me</p><p style='height:100px'>Scroll me</p>\n<p style='height:100px'>Scroll me</p><p style='height:100px'>Scroll me</p>\n<p style='height:100px'>Scroll me</p><p style='height:100px'>Scroll me</p>",
+  "script": "console.log('rr');\ndocument.addEventListener('scroll', e => {\n  console.log('foo');\n  e.preventDefault();\n});"
+}
+

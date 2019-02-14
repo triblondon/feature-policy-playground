@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<div id='result'>\n  <button id='trigger'>Click to display location</button>\n</div>",
+  "script": "document.getElementById('trigger').addEventListener('click', () => {\n  if (\"geolocation\" in navigator) {\n    document.getElementById('result').innerHTML = \"Getting location...\";\n    navigator.geolocation.getCurrentPosition(\n      position => report(true, position.coords),\n      error => report(false, null, error.code == 1 ? \"permission-denied\" : \"other\")\n    );\n  } else {\n    report(false, null, \"missing-api\");\n  }\n});\n\nfunction report (isWorking, position, failReason) {\n  const mapArg = (isWorking) ? \"&center=\" + position.latitude + \",\" + position.longitude : \"\";\n  document.getElementById('result').innerHTML = \"<img src='https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=300x150&maptype=roadmap&key=AIzaSyDsRaIbqEJg8Bi0eU73BKX2dCPfaMLk2Oc\" + mapArg + \"' width=300 height=150 />\";\n  DemoUtils.reportDemoResult(isWorking, {failReason: failReason});\n}"
+}
+

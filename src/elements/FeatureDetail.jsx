@@ -32,7 +32,7 @@ class FeatureDetail extends React.Component {
 	async resetAndLoad() {
 		if (this.props.feature.name !== this.state.feature) {
 			this.setState({ feature: this.props.feature.name, policyAllowed: true, demoID: null, demoHtml: null, demoScript: null });
-			const demoFetch = await fetch('/demos/' + this.props.feature.name, { headers: { Accept: 'application/json' } });
+			const demoFetch = await fetch('/demos/' + this.props.feature.name + '.json', { headers: { Accept: 'application/json' } });
 			if (demoFetch.ok) {
 				const demoCode = await demoFetch.json();
 				if (demoCode.script || demoCode.html) {
@@ -125,7 +125,7 @@ class FeatureDetail extends React.Component {
 								<h4>Output</h4>
 								<iframe
 									title='Demo output'
-									src={'/demos/'+feature.name+'?demoID='+this.state.demoID}
+									src={'/demos/'+feature.name+'.html?demoID='+this.state.demoID}
 									allow={feature.name + ' ' + (this.state.policyAllowed ? '*' : "'none'")}
 								/>
 							</div>

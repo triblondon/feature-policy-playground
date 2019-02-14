@@ -17,6 +17,9 @@ main > section {
 header {
 	padding: 15px 0;
 }
+header a {
+  color: black;
+}
 
 h2 {
 	font-weight: lighter;
@@ -144,4 +147,34 @@ footer .footer-links a {
 
 .features-list {
   width: 100%;
+  margin-bottom: 1em;
+}
+.features-list td {
+  padding: 3px;
+}
+.features-list tr:nth-child(even) {
+  background: #f0f0f0;
+}
+.features-list .browser {
+  display: inline-block;
+}
+.features-list .browser.requires-flag {
+  color: red;
+}
+.features-list .browser i {
+  vertical-align: super;
+  font-size: 50%;
+  margin-left: 2px;
+}
+.features-list .browser img {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+  display: inline-block;
+}
+.features-list .browser + .browser {
+  margin-left: 10px;
+}
+.features-list .links a + a {
+  margin-left: 10px;
 }

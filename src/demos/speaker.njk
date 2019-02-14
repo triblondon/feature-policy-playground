@@ -1,0 +1,20 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}
+{% endblock %}
+
+{% block html %}
+This page makes an annoying noise for 1 second.
+{% endblock %}
+
+{% block script %}
+if (!('AudioContext' in window)) throw new Error('Browser does not have an AudioContext API');
+const audioCtx = new AudioContext;
+const o = audioCtx.createOscillator();
+o.type = 'square';
+o.frequency.setValueAtTime(440, audioCtx.currentTime);
+o.connect(audioCtx.destination);
+o.start();
+DemoUtils.reportDemoResult(true)
+setTimeout(() => o.stop(), 1000);
+{% endblock %}

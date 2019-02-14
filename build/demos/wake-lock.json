@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "if (!('getWakeLock' in navigator)) throw new Error(\"Browser does not support Wake locks\");\nnavigator.getWakeLock('screen')\n  .then(function(wakeLock) {\n    var request = wakeLock.createRequest();\n    setTimeout(() => request.cancel(), 1000);\n    document.body.innerHTML = \"Got wake lock\";\n    DemoUtils.reportDemoResult(true);\n  })\n  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))\n;"
+}
+

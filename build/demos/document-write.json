@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<p>Existing content</p>",
+  "script": "window.addEventListener('load', () => {\n  document.write('<p>New content</p>');\n  if (document.body.innerText.includes('New content')) {\n    DemoUtils.reportDemoResult(true);\n  } else {\n    throw new Error('DOM does not contain the expected new content');\n  }\n});"
+}
+

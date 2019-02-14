@@ -1,0 +1,78 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    
+<div id='result'>
+  <button id='trigger'>Click to display location</button>
+</div>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+document.getElementById('trigger').addEventListener('click', () => {
+  if ("geolocation" in navigator) {
+    document.getElementById('result').innerHTML = "Getting location...";
+    navigator.geolocation.getCurrentPosition(
+      position => report(true, position.coords),
+      error => report(false, null, error.code == 1 ? "permission-denied" : "other")
+    );
+  } else {
+    report(false, null, "missing-api");
+  }
+});
+
+function report (isWorking, position, failReason) {
+  const mapArg = (isWorking) ? "&center=" + position.latitude + "," + position.longitude : "";
+  document.getElementById('result').innerHTML = "<img src='https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=300x150&maptype=roadmap&key=AIzaSyDsRaIbqEJg8Bi0eU73BKX2dCPfaMLk2Oc" + mapArg + "' width=300 height=150 />";
+  DemoUtils.reportDemoResult(isWorking, {failReason: failReason});
+}
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

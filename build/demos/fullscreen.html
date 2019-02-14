@@ -1,0 +1,85 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+#only-when-fullscreen {
+  font-size: 8vw;
+  text-align: center;
+  background: white;
+  display: none;
+  padding: 10vw;
+}
+.fullscreen #only-when-fullscreen {
+  display: block;
+}
+
+    </style>
+  </head>
+  <body>
+    
+<button id='trigger'>Go fullscreen!</button>
+<div id='only-when-fullscreen'>Reverting to normal mode in a few seconds... (or press ESC)</div>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+const targetEl = document.getElementById('only-when-fullscreen');
+const triggerEl = document.getElementById('trigger');
+triggerEl.addEventListener('click', () => {
+  targetEl.requestFullscreen()
+    .then(() => {
+      DemoUtils.reportDemoResult(true);
+      setTimeout(() => document.exitFullscreen(), 1000);
+    })
+    .catch(e => DemoUtils.reportDemoResult(false, {failReason: e.toString()}))
+  ;
+});
+targetEl.addEventListener('fullscreenchange', () => {
+  document.body.classList.toggle('fullscreen', !!document.fullscreenElement);
+});
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

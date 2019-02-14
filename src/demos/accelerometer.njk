@@ -1,0 +1,30 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}Use a device with an accelerometer and move the device.{% endblock %}
+
+{% block script %}
+let sns, cleanup;
+DemoUtils.setupTimeout('No readings detected, maybe device has no physical sensor');
+
+function onReading(e) {
+  const data = sns || e.acceleration;
+  const apiName = sns ? 'Accelerometer' : 'DeviceMotionEvent';
+  document.body.innerHTML = `x: ${data.x}, y: ${data.y}, z: ${data.z}`;
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Motion was reported using the '+apiName+' API'});
+  cleanup();
+}
+
+if (window.Accelerometer) {
+  sns = new Accelerometer({frequency: 10});
+  sns.addEventListener('reading', onReading);
+  sns.start();
+  cleanup = () => sns.removeEventListener('reading', onReading);
+} else if (window.DeviceMotionEvent) {
+  window.addEventListener("devicemotion", onReading);
+  cleanup = () => window.removeEventListener('devicemotion', onReading);
+} else {
+  throw new Error('Browser has no accelerometer API');
+}
+{% endblock %}

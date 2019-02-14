@@ -1,0 +1,24 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}{% endblock %}
+
+{% block script %}
+let sns;
+DemoUtils.setupTimeout('No readings detected, maybe device has no physical sensor');
+
+function onReading(e) {
+  document.body.innerHTML = `lux: ${sns.illuminance}`;
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Illumination was reported'});
+  sns.removeEventListener('reading', onReading);
+}
+
+if (window.AmbientLightSensor) {
+  sns = new AmbientLightSensor({frequency: 10});
+  sns.addEventListener('reading', onReading);
+  sns.start();
+} else {
+  throw new Error('Browser has no ambient light API');
+}
+{% endblock %}

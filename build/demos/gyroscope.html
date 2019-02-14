@@ -1,0 +1,79 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    Use a device with an accelerometer and move the device.
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+let sns, cleanup;
+DemoUtils.setupTimeout('No readings detected, maybe device has no physical sensor');
+
+function onReading(e) {
+  const data = sns || e.rotationRate;
+  const apiName = sns ? 'Gyroscope' : 'DeviceMotionEvent';
+  document.body.innerHTML = JSON.stringify(data);
+  DemoUtils.reportDemoResult(true, {resultDetail: 'Motion was reported using the '+apiName+' API'});
+  cleanup();
+}
+
+if (window.Gyroscope) {
+  sns = new Gyroscope({frequency: 10});
+  sns.addEventListener('reading', onReading);
+  sns.start();
+  cleanup = () => sns.removeEventListener('reading', onReading);
+} else if (window.DeviceMotionEvent) {
+  window.addEventListener("devicemotion", onReading);
+  cleanup = () => window.removeEventListener('devicemotion', onReading);
+} else {
+  throw new Error('Browser has no gyroscope API');
+}
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

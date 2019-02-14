@@ -1,0 +1,17 @@
+{% extends "./_layout.njk" %}
+
+{% block css %}{% endblock %}
+
+{% block html %}
+<p style='height:100px'>Scroll me</p><p style='height:100px'>Scroll me</p>
+<p style='height:100px'>Scroll me</p><p style='height:100px'>Scroll me</p>
+<p style='height:100px'>Scroll me</p><p style='height:100px'>Scroll me</p>
+{% endblock %}
+
+{% block script %}
+console.log('rr');
+document.addEventListener('scroll', e => {
+  console.log('foo');
+  e.preventDefault();
+});
+{% endblock %}

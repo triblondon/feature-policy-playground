@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "",
+  "script": "if (!('getVRDisplays' in navigator)) throw new Error(\"Browser does not support WebVR\");\nnavigator.getVRDisplays()\n  .then(function(displays) {\n    document.body.innerHTML = \"Number of VR displays available: \" + displays.length;\n      DemoUtils.reportDemoResult(true);\n  })\n  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))\n;"
+}
+

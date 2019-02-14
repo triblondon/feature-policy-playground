@@ -1,0 +1,83 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+@font-face {
+  font-family: "aquilinetworegular";
+
+  /* License: https://www.fontsquirrel.com/license/Aquiline-two */
+  src: url(/test-assets/AquilineTwo-webfont.woff?delay=1000) format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+body {
+  font-family: aquilinetworegular; /* This font has a huge line-height */
+  font-size: 8vw;
+}
+
+    </style>
+  </head>
+  <body>
+    
+<p id='test-para'>This text is supposed to be shown in an interesting font, which takes ages to load.</p>
+
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+const paraEl = document.getElementById('test-para');
+const benchmarkHeight = paraEl.offsetHeight;
+setTimeout(() => {
+  const newHeight = paraEl.offsetHeight;
+  if (newHeight !== benchmarkHeight) {
+    return DemoUtils.reportDemoResult(true, {resultDetail: "The font changed after the content was loaded"});
+  } else {
+    return DemoUtils.reportDemoResult(false, {resultDetail: "The font may have loaded but the browser didn't render it"});
+  }
+}, 1200);
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

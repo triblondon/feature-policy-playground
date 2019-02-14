@@ -1,0 +1,68 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Feature policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    
+  </body>
+
+  <!-- type='module' prevents script from being blocked by a sync-script policy -->
+  <script type='module'>
+    window.DemoUtils = (() => {
+      let timeout, hasReported;
+      return {
+        setupTimeout: (msg, dur) => {
+          if (hasReported) return;
+          timeout = setTimeout(() => {
+            window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
+          }, dur || 500);
+        },
+        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          const thisURL = new URL(window.location.href);
+          window.top.postMessage({
+            type: "feature-test-result",
+            demoID: thisURL.searchParams.get('demoID'),
+            isWorking: isWorking,
+            failReason: failReason,
+            resultDetail: resultDetail
+          }, "*");
+          hasReported = true;
+        }
+      };
+    })();
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    window.addEventListener('error', reportFailure);
+    try {
+      
+if (!('usb' in navigator)) throw new Error("Browser does not support WebUSB");
+navigator.usb.getDevices()
+  .then(devices => {
+    const report = "<p>Total devices: " + devices.length + "</p><ul>" + devices.map(d => {
+      return "<li>Product name: " + device.productName + ", serial number " + device.serialNumber + "</li>";
+    }).join('\n') + "</ul>";
+    document.body.innerHTML = report;
+    DemoUtils.reportDemoResult(true);
+  })
+  .catch(e => DemoUtils.reportDemoResult(false, {resultDetail: e.toString()}))
+;
+
+    } catch(err) {
+      reportFailure(err);
+    }
+  </script>
+</html>
+

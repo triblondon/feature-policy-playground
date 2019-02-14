@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<script src=\"/test-assets/simple-script.js\"></script>",
+  "script": "if (window.simpleScriptLoaded) {\n  DemoUtils.reportDemoResult(true);\n} else {\n  DemoUtils.reportDemoResult(false);\n}"
+}
+

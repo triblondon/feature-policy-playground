@@ -46,4 +46,4 @@ policies.forEach(pol => {
   }
 });
 
-fs.writeFileSync(path.join(__dirname, '../src/data/policies-dist.json'), JSON.stringify(policies));
+fs.writeFileSync(path.join(__dirname, '../src/_build/policies.json'), JSON.stringify(policies));

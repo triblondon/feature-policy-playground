@@ -1,0 +1,11 @@
+
+
+
+
+
+{
+	"css": "",
+	"html": "<div style='height:700px'>\n  <p>This page wants to load the off-screen image below immediately, and tells the browser not to lazyload it.  If the lazyload policy is not allowed, it will lazyload anyway.</p>\n</div>\n<p><img id='test-img' src='/test-assets/small-image.jpg' width='100' height='100' lazyload='on' onLoad='window.onImageLoad()' /></p>",
+  "script": "let timerID;\nwindow.onImageLoad = () => {\n  const isStillOffscreen = (document.getElementById('test-img').offsetTop > (window.scrollY + window.innerHeight));\n  DemoUtils.reportDemoResult(isStillOffscreen, {\n    resultDetail: isStillOffscreen ? 'Image loaded immediately, while still off-screen' : 'Image load was delayed until the image was on-screen'\n  });\n  cancelAnimationFrame(timerID);\n};\nfunction scroll() {\n  if ((window.scrollY + window.innerHeight) < document.body.scrollHeight) {\n    window.scrollBy(0, 2);\n    timerID = requestAnimationFrame(scroll);\n  }\n}\ndocument.addEventListener('DOMContentLoaded', scroll);"
+}
+
