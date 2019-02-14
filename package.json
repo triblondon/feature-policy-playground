@@ -14,8 +14,9 @@
     "react-scripts": "^2.1.5"
   },
   "scripts": {
-    "start": "npm build && PORT=3001 react-scripts start",
-    "build": "node ./build-scripts/browser-compat.js && node ./build-scripts/demos.js && react-scripts build"
+    "pre-build": "node ./build-scripts/browser-compat.js && node ./build-scripts/demos.js",
+    "start": "npm run pre-build && PORT=3001 react-scripts start",
+    "build": "npm run pre-build && react-scripts build && rm -rf docs && mv ./build ./docs"
   },
   "eslintConfig": {
     "extends": "react-app"
