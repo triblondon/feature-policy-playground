@@ -46,10 +46,17 @@ const triggerRouteAction = () => {
   }
 }
 
-const setState = (newRoutePath: string, mode: string) => {
+const setState = (newRoutePath: string, newTitle?: string, mode: string) => {
   const methodName = mode === ROUTER_MODE_REPLACE ? 'replaceState' : 'pushState'
   if (newRoutePath !== window.location.pathname) {
     window.history[methodName]({}, '', newRoutePath)
+  }
+  if (newTitle !== undefined) {
+    const title = [];
+    if (config.title && config.title.prefix) title.push(config.title.prefix);
+    if (newTitle) title.push(newTitle);
+    if (config.title && config.title.suffix) title.push(config.title.suffix);
+    document.title = title.join(config.title.delim || ' | ');
   }
 }
 
@@ -63,12 +70,12 @@ export const configure = (newConfig: Config) => {
   }
 }
 
-export const replaceState = (newRoutePath: string) => setState(newRoutePath, ROUTER_MODE_REPLACE)
-export const pushState = (newRoutePath: string) => setState(newRoutePath, ROUTER_MODE_PUSH)
+export const replaceState = (newRoutePath: string, newTitle?: string) => setState(newRoutePath, newTitle, ROUTER_MODE_REPLACE)
+export const pushState = (newRoutePath: string, newTitle?: string) => setState(newRoutePath, newTitle, ROUTER_MODE_PUSH)
 
 export const Link = (props: LinkProps) => {
   const clickHandler = (evt) => {
-    if (evt.shiftKey || evt.controlKey || evt.metakey || evt.altKey) return
+    if (evt.shiftKey || evt.controlKey || evt.metaKey || evt.altKey) return
     const route = config.routes.find(r => r.pattern.test(props.to))
     if (route) {
       evt.preventDefault()

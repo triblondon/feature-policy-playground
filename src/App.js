@@ -25,6 +25,7 @@ class App extends Component {
         { name: 'empty', pattern: /^\/$/, action: () => this.setPolicy(null) },
         { name: 'policy', pattern: /^\/policies\/([^/]+)\/?$/, action: params => this.setPolicy(params[1]) }
       ],
+      title: { suffix: 'Feature policy', delim: ' - ' },
       triggerForInitialState: true
     })
   }
@@ -35,7 +36,7 @@ class App extends Component {
         return {activeFeature: newFeature};
       }
     })
-    router.pushState(newFeature ? '/policies/' + newFeature : '/');
+    router.pushState(newFeature ? '/policies/' + newFeature : '/', newFeature);
   }
 
   render() {

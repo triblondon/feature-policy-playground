@@ -1,13 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 
+import { Link } from '../router';
+
 export default props => {
   const policies = props.policies;
-
-  const handleLinkClick = (newFeature, evt) => {
-    evt.preventDefault();
-    props.onChange(newFeature);
-  };
 
   return (
     <div className='row'><div className='col-12'>
@@ -22,7 +19,7 @@ export default props => {
             });
             return (
               <tr key={p.name}>
-                <td><a href={'/features/'+p.name} className={cl} onClick={handleLinkClick.bind(null, p.name)}>{p.name}</a></td>
+                <td><Link to={'/policies/'+p.name} className={cl}>{p.name}</Link></td>
                 <td>
                   {p.browserSupport && Object.entries(p.browserSupport).map(([browser, data]) => {
                     const classes = classNames({
