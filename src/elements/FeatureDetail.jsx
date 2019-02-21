@@ -126,7 +126,8 @@ class FeatureDetail extends React.Component {
 								<iframe
 									title='Demo output'
 									src={'/demos/'+feature.name+'.html?demoID='+this.state.demoID}
-									allow={feature.name + ' ' + (this.state.policyAllowed ? '*' : "'none'")}
+                  allow={feature.name + ' ' + (this.state.policyAllowed ? '*' : "'none'")}
+                  key={generateRandomID()}
 								/>
 							</div>
 						</div>
