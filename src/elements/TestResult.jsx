@@ -6,15 +6,18 @@ const RESULT_OK = 'OK';
 const RESULT_EXPECTED_FAIL = 'EXPECTED_FAIL';
 const RESULT_UNEXPECTED_SUCCESS = 'UNEXPECTED_SUCCESS';
 const RESULT_UNEXPECTED_FAIL = 'UNEXPECTED_FAIL';
+const LONG_WAIT_TIMEOUT = 2000;
 
 class TestResult extends Component {
   constructor (props) {
     super(props)
     this.state = {
       status: RESULT_PENDING,
-      detail: null
+      detail: null,
+      longWait: false
     }
     this.boundHandleReceiveMessage = this.handleReceiveMessage.bind(this);
+    this.longWaitTimer = null;
   }
 
   componentDidMount() {
@@ -26,7 +29,9 @@ class TestResult extends Component {
   }
   componentDidUpdate(prevProps) {
     if (this.props.id !== prevProps.id) {
-      this.setState({status: RESULT_PENDING, detail: null});  // <-- TODO: maybe setState in a didUpdate hook is bad practice?
+      this.setState({ status: RESULT_PENDING, detail: null, longWait: false });  // <-- TODO: maybe setState in a didUpdate hook is bad practice?
+      clearTimeout(this.longWaitTimer);
+      this.longWaitTimer = setTimeout(() => this.setState({ longWait: true }), LONG_WAIT_TIMEOUT);
     }
   }
 
@@ -43,6 +48,7 @@ class TestResult extends Component {
       this.setState({ status: RESULT_UNEXPECTED_FAIL });
     }
     this.setState({ detail: msg.data.resultDetail });
+    clearTimeout(this.longWaitTimer);
   }
 
   render() {
@@ -68,7 +74,11 @@ class TestResult extends Component {
 					<div className="spinner-grow" role="status"><span className="sr-only">Loading...</span></div>
 				)}
 				<div className='content'>
-					<p>{statusDescriptions[this.state.status]}</p>
+					<p>{statusDescriptions[this.state.status]}
+            {this.state.status === RESULT_PENDING && this.state.longWait && (
+              <span> (you may need to interact with the demo)</span>
+            )}
+          </p>
 					{Boolean(this.state.detail) && (
 						<p className='detail'>{this.state.detail}</p>
 					)}
