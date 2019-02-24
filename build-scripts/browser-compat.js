@@ -7,7 +7,7 @@
  * ship that much data into a frontend bundle.
  */
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 const mdnData = require('mdn-browser-compat-data');
@@ -46,4 +46,5 @@ policies.forEach(pol => {
   }
 });
 
-fs.writeFileSync(path.join(__dirname, '../src/_build/policies.json'), JSON.stringify(policies));
+fs.ensureDirSync(path.join(__dirname, '../src/_build'));
+fs.writeJsonSync(path.join(__dirname, '../src/_build/policies.json'), policies);
