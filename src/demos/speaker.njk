@@ -4,17 +4,19 @@
 {% endblock %}
 
 {% block html %}
-This page makes an annoying noise for 1 second.
+  <button id='trigger'>Make an annoying noise</button>
 {% endblock %}
 
 {% block script %}
 if (!('AudioContext' in window)) throw new Error('Browser does not have an AudioContext API');
-const audioCtx = new AudioContext;
-const o = audioCtx.createOscillator();
-o.type = 'square';
-o.frequency.setValueAtTime(440, audioCtx.currentTime);
-o.connect(audioCtx.destination);
-o.start();
-DemoUtils.reportDemoResult(true)
-setTimeout(() => o.stop(), 1000);
+document.getElementById('trigger').addEventListener('click', () => {
+  const audioCtx = new AudioContext;
+  const o = audioCtx.createOscillator();
+  o.type = 'square';
+  o.frequency.setValueAtTime(440, audioCtx.currentTime);
+  o.connect(audioCtx.destination);
+  o.start();
+  DemoUtils.reportDemoResult(true)
+  setTimeout(() => o.stop(), 500);
+});
 {% endblock %}
