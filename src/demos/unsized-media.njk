@@ -9,6 +9,6 @@
 {% block script %}
 window.addEventListener('load', () => {
   const w = document.getElementById('test-img').offsetWidth;
-  DemoUtils.reportDemoResult(w === 150);
+  DemoUtils.reportDemoResult(w === 150, {resultDetail: 'The natural width of the image is 150px, and it has been rendered with a width of ' + w});
 });
 {% endblock %}
