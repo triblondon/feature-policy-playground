@@ -38,7 +38,6 @@ const triggerRouteAction = () => {
     const matches = route.pattern.exec(window.location.pathname)
     const params = matches || {}
     const query = getQueryString()
-    console.log('Router:', route.name, params, query, window.location.href)
     const actionResult = route.action(params, query, window.location.href)
     if (typeof config.onRoute === 'function') {
       config.onRoute(actionResult)
