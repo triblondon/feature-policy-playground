@@ -80,6 +80,7 @@ export const Link = (props: LinkProps) => {
       evt.preventDefault()
       window.history.pushState({}, '', props.to)
       triggerRouteAction()
+      window.scrollTo(0,0)
     }
   }
   return (

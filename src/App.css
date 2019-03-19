@@ -96,6 +96,10 @@ h3 {
 	margin: 0;
 }
 
+.browser-support {
+  margin-bottom: 1em;
+}
+
 .browser-support .card-text {
   text-align: center;
   line-height: 25px;

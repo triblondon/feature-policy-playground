@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Highlight from 'react-highlight.js';
+import { DiscussionEmbed } from 'disqus-react';
 
 import TestResult from './TestResult';
 
@@ -61,6 +62,12 @@ class FeatureDetail extends React.Component {
       edge: false,
       safari: false
     }, feature.browserSupport);
+
+    const disqusConfig = {
+      url: 'https://featurepolicy.info' + window.location.pathname,
+      identifier: this.props.feature.name,
+      title: this.props.feature.name,
+    };
 
     return (
       <main className='feature col-12'>
@@ -169,6 +176,11 @@ class FeatureDetail extends React.Component {
             </ul>
           </section>
         )}
+
+        <section className='discuss'>
+          <h3>Discussion</h3>
+          <DiscussionEmbed shortname='featurepolicy' config={disqusConfig} />
+        </section>
 
       </main>
     );
