@@ -5,7 +5,7 @@
 
 {
 	"css": "",
-	"html": "This page makes an annoying noise for 1 second.",
-  "script": "if (!('AudioContext' in window)) throw new Error('Browser does not have an AudioContext API');\nconst audioCtx = new AudioContext;\nconst o = audioCtx.createOscillator();\no.type = 'square';\no.frequency.setValueAtTime(440, audioCtx.currentTime);\no.connect(audioCtx.destination);\no.start();\nDemoUtils.reportDemoResult(true)\nsetTimeout(() => o.stop(), 1000);"
+	"html": "<button id='trigger'>Make an annoying noise</button>",
+  "script": "if (!('AudioContext' in window)) throw new Error('Browser does not have an AudioContext API');\ndocument.getElementById('trigger').addEventListener('click', () => {\n  const audioCtx = new AudioContext;\n  const o = audioCtx.createOscillator();\n  o.type = 'square';\n  o.frequency.setValueAtTime(440, audioCtx.currentTime);\n  o.connect(audioCtx.destination);\n  o.start();\n  DemoUtils.reportDemoResult(true)\n  setTimeout(() => o.stop(), 500);\n});"
 }
 

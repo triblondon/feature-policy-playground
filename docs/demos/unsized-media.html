@@ -30,10 +30,11 @@
             window.DemoUtils.reportDemoResult(false, {resultDetail: msg});
           }, dur || 500);
         },
-        reportDemoResult: (isWorking, { failReason, resultDetail } = {}) => {
+        reportDemoResult: (isWorking, { failReason, resultDetail, overwrite } = {}) => {
           if (timeout) {
             clearTimeout(timeout);
           }
+          if (hasReported && overwrite === false) return;
           const thisURL = new URL(window.location.href);
           window.top.postMessage({
             type: "feature-test-result",
@@ -46,13 +47,16 @@
         }
       };
     })();
-    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString()});
+    const reportFailure = err => DemoUtils.reportDemoResult(false, {resultDetail: err.message || err.toString(), overwrite: false});
     window.addEventListener('error', reportFailure);
+    new ReportingObserver((reports, obs) => {
+      reportFailure('ReportingObserver triggered a report: ' + reports[0].body.message);
+    }, {types: ['feature-policy-violation'], buffered: true}).observe();
     try {
       
 window.addEventListener('load', () => {
   const w = document.getElementById('test-img').offsetWidth;
-  DemoUtils.reportDemoResult(w === 150);
+  DemoUtils.reportDemoResult(w === 150, {resultDetail: 'The natural width of the image is 150px, and it has been rendered with a width of ' + w});
 });
 
     } catch(err) {
