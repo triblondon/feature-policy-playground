@@ -106,7 +106,7 @@
       { "rel": "feature-spec", "href": "https://wicg.github.io/picture-in-picture/" }
     ],
     "browserSupport": {
-      "chrome": { "minVersion": 74 }
+      "chrome": { "minVersion": 70 }
     }
   },
   {
