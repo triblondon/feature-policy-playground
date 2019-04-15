@@ -74,7 +74,7 @@ export const pushState = (newRoutePath: string, newTitle?: string) => setState(n
 
 export const Link = (props: LinkProps) => {
   const clickHandler = (evt) => {
-    if (evt.shiftKey || evt.controlKey || evt.metaKey || evt.altKey) return
+    if (evt.shiftKey || evt.ctrlKey || evt.metaKey || evt.altKey || evt.nativeEvent.button === 1) return
     const route = config.routes.find(r => r.pattern.test(props.to))
     if (route) {
       evt.preventDefault()
